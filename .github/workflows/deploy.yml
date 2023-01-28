@@ -4,13 +4,14 @@ on:
     branches:
       - main
       - dev
-jobs:
-  test:
-    env:
+env:
       MONGODB_CLUSTER_ADDRESS: cluster0.jxv4plp.mongodb.net
       MONGODB_USERNAME: mongoadmin
       MONGODB_PASSWORD: k83kQdLdqE7rmA0Q
       PORT: 8080
+jobs:
+  test:
+    
     environment: testing
     
     runs-on: ubuntu-latest
