@@ -37,6 +37,6 @@ jobs:
       - name: Output information
         run: |        
           echo "..."
-          echo " MONGODB_USERNAME: ${{env.MONGODB_USERNAME}}"
-          echo : " MONGODB_CLUSTER_ADDRESS: ${{env.MONGODB_CLUSTER_ADDRESS}}"
+          echo " MONGODB_USERNAME: ${{  env.MONGODB_USERNAME }}"
+          echo  " MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
           
