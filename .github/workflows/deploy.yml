@@ -6,7 +6,13 @@ on:
       - dev
 jobs:
   test:
+    env:
+      MONGODB_CLUSTER_ADDRESS: cluster0.jxv4plp.mongodb.net
+      MONGODB_USERNAME: mongoadmin
+      MONGODB_PASSWORD: k83kQdLdqE7rmA0Q
+      PORT: 8080
     environment: testing
+    
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
