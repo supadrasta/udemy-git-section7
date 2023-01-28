@@ -40,4 +40,5 @@ jobs:
           echo "..."
           echo " MONGODB_USERNAME: $MONGODB_USERNAME"
           echo  " MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
+          echo " PORT: $PORT"
           
