@@ -5,9 +5,9 @@ on:
       - main
       - dev
 env:
-      MONGODB_CLUSTER_ADDRESS: cluster0.jxv4plp.mongodb.net
-      MONGODB_USERNAME: mongoadmin
-      MONGODB_PASSWORD: k83kQdLdqE7rmA0Q
+      MONGODB_CLUSTER_ADDRESS: ${{ secrets.MONGODB_CLUSTER_ADDRESS }}
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
       WORKFLOW_LEVEL_VAR1: This_is_workflow_level_env_variable
 jobs:
