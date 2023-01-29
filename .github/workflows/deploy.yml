@@ -55,4 +55,5 @@ jobs:
           echo  " GITHUB_ENV: $GITHUB_ENV"
           echo " GITHUB_ACTOR: $GITHUB_ACTOR"
           echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
-          echo "GITHUB_RETENTION_DAYS $GITHUB_RETENTION_DAYS"    
+          echo "GITHUB_RETENTION_DAYS $GITHUB_RETENTION_DAYS"   
+          echo "Open Secret: {{ secrets.OPEN_SECRET }}"
