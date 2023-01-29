@@ -37,7 +37,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     env:
-      DEPLOY_JOB_LEVEL_VAR: TestVariable
+      DEPLOY_JOB_LEVEL_VAR: DEPLOY_JOB_LEVEL_VAR
     steps:
       - name: Output information
         run: |        
