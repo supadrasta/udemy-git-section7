@@ -9,11 +9,13 @@ env:
       MONGODB_USERNAME: mongoadmin
       MONGODB_PASSWORD: k83kQdLdqE7rmA0Q
       PORT: 8080
+      WORKFLOW_LEVEL_VAR1: This_is_workflow_level_env_variable
 jobs:
   test:
     
     environment: testing
-    
+    env: 
+      TEST_JOB_LEVEL_VAR: SomeValuethatwillnotbeavailablefromDeployJob
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -34,6 +36,8 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_JOB_LEVEL_VAR: TestVariable
     steps:
       - name: Output information
         run: |        
@@ -41,4 +45,6 @@ jobs:
           echo " MONGODB_USERNAME: $MONGODB_USERNAME"
           echo  " MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
           echo " PORT: $PORT"
-          
+          echo "$WORKFLOW_LEVEL_VAR1"
+          echo "$DEPLOY_JOB_LEVEL_VAR"
+          echo "$TEST_JOB_LEVEL_VAR"
