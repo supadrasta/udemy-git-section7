@@ -57,4 +57,4 @@ jobs:
           echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
           echo "GITHUB_RETENTION_DAYS $GITHUB_RETENTION_DAYS"   
           echo "Open Secret: {{ secrets.OPEN_SECRET }}"
-          echo " This is repo level env variable. This is : ${{ env.ENVIRONMENT }} environment "
+          echo " This is repo level env variable. This is : ${{ secrets.ENVIRONMENT }} environment "
