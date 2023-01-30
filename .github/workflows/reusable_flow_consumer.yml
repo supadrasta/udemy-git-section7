@@ -37,5 +37,5 @@ jobs:
     needs: test
     uses: ./.github/workflows/reusable.yml
     with: 
-      artifact_name: Chalo
+      artifact_name: 'Chalo'
     
