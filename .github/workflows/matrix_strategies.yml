@@ -1,1 +1,36 @@
-
+name: Deployment Strategies
+on:
+  push:
+    branches:
+      - main
+      - dev
+env:
+      MONGODB_CLUSTER_ADDRESS: ${{ secrets.MONGODB_CLUSTER_ADDRESS }}
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      PORT: 8080
+      WORKFLOW_LEVEL_VAR1: This_is_workflow_level_env_variable
+jobs:
+  build:
+    strategy:
+      matrix: 
+        node-version: [12,14,16,18]
+        operating-system: [ ubuntu-latest, windows-latest ]
+    runs-on: ${{ matrix.operating-system }}
+   
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT
+      - name: Run tests
+        run: npm test
+      - name: Output information
+        run: echo "..."
