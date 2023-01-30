@@ -1,8 +1,17 @@
 name: Reusable deploy
-on: workflow_call
+on: 
+  workflow_call:
+      inputs:
+        artifact_name: 
+          description: the description of the input
+          required: true
+          default: 'Hello World'
+          type: string
+             
+          
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps: 
       - name: output information
-        run: echo " deploying & uploading"
+        run: echo " deploying & uploading" && ${{inputs.artifact_name }}
