@@ -14,4 +14,4 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: output information
-        run: echo " deploying & uploading" && ${{inputs.artifact_name }}
+        run: echo " deploying & uploading ${{inputs.artifact_name }}"
