@@ -1,5 +1,6 @@
 ARG CUDA_VERSION=12.2.0
 ARG BASE_DIST=ubuntu20.04
+ARG SSH_PASSWORD
 FROM nvidia/cuda:${CUDA_VERSION}-base-${BASE_DIST} as build
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -57,7 +58,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     python3-pip \
     openssh-server \
-    mariadb-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -65,18 +65,52 @@ RUN apt-get update && apt-get upgrade -y && apt-get clean
 RUN apt-get install -y nvidia-cuda-toolkit
 
 # Configure SSH
+#Old SSH code
+#RUN mkdir /var/run/sshd
+#RUN echo 'root:${SSH_PASSWORD}' | chpasswd
+#RUN sed -i 's|^#PermitRootLogin.*|PermitRootLogin yes|g' /etc/ssh/sshd_config
+#RUN sed -i 's|^#PasswordAuthentication.*|PasswordAuthentication yes|g' /etc/ssh/sshd_config
+#RUN sed -i 's|^#Port.*|Port 22|g' /etc/ssh/sshd_config
+#RUN sed -i 's|^#AddressFamily.*|AddressFamily any|g' /etc/ssh/sshd_config
+
+# Create a non-root user
 RUN mkdir /var/run/sshd
-RUN echo 'root:screencast' | chpasswd
-RUN sed -i 's|^#PermitRootLogin.*|PermitRootLogin yes|g' /etc/ssh/sshd_config
-RUN sed -i 's|^#PasswordAuthentication.*|PasswordAuthentication yes|g' /etc/ssh/sshd_config
-RUN sed -i 's|^#Port.*|Port 22|g' /etc/ssh/sshd_config
-RUN sed -i 's|^#AddressFamily.*|AddressFamily any|g' /etc/ssh/sshd_config
+RUN mkdir -p /home/nihar/.ssh
+RUN mkdir -p /home/nihar/.ssh/authorized_keys
+RUN mkdir -p /home/suresh/.ssh
+RUN mkdir -p /home/bala/.ssh
+
+RUN useradd -m -d /home/nihar -s /bin/bash nihar 
+RUN useradd -m -d /home/suresh -s /bin/bash suresh 
+RUN useradd -m -d /home/bala -s /bin/bash bala 
+
+# Set a password for the non-root user 
+RUN echo 'nihar:testpwd23' | chpasswd
+RUN echo 'suresh:testpwd23' | chpasswd
+RUN echo 'bala:testpwd23' | chpasswd
+
+# Allow the non-root user to run sudo commands if needed
+# RUN usermod -aG sudo developer
 
 # SSH login fix. Otherwise, the user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-RUN ssh-keygen -A
+#RUN ssh-keygen -A
+RUN ssh-keygen -t rsa -b 4096 -f /home/nihar/.ssh/authorized_keys/id_rsa -N ''
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
+
+# Display the public key
+RUN cat /home/nihar/.ssh/authorized_keys/id_rsa.pub 
+
+# Ensure proper permissions on SSH directory and authorized_keys file
+RUN chown -R nihar:nihar /home/nihar/.ssh && chown -R nihar:nihar /home/nihar/.ssh/authorized_keys && chmod 700 /home/nihar/.ssh && chmod 600 /home/nihar/.ssh/authorized_keys 
+#RUN chown -R suresh:suresh /home/suresh/.ssh && chmod 700 /home/suresh/.ssh && chmod 600 /home/suresh/.ssh/authorized_keys
+#RUN chown -R bala:bala /home/bala/.ssh && chmod 700 /home/bala/.ssh && chmod 600 /home/bala/.ssh/authorized_keys
+
+RUN sed -i 's|^#PermitRootLogin.*|PermitRootLogin no|g' /etc/ssh/sshd_config
+RUN sed -i 's|^#PasswordAuthentication.*|PasswordAuthentication yes|g' /etc/ssh/sshd_config
+RUN sed -i 's|^#Port.*|Port 22|g' /etc/ssh/sshd_config
+RUN sed -i 's|^#AddressFamily.*|AddressFamily any|g' /etc/ssh/sshd_config
 
 # Expose the SSH port
 EXPOSE 22
